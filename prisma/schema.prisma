@@ -1,0 +1,23 @@
+// schema.prisma
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Order {
+  id           String    @id @default(uuid())
+  sourceOrderId String
+  items        Item[]
+}
+
+model Item {
+  id           String    @id @default(uuid())
+  url          String
+  sourceItemId String
+  order        Order     @relation(fields: [orderId], references: [id])
+  orderId      String
+}

@@ -1,7 +1,7 @@
-// schema.prisma
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 generator client {
@@ -9,15 +9,26 @@ generator client {
 }
 
 model Order {
-  id           String    @id @default(uuid())
+  id            Int      @id @default(autoincrement())
   sourceOrderId String
-  items        Item[]
+  accountRef    String
+  createdAt     DateTime @default(now()) // Added createdAt field
+  items         Item[]
 }
 
 model Item {
-  id           String    @id @default(uuid())
-  url          String
-  sourceItemId String
-  order        Order     @relation(fields: [orderId], references: [id])
-  orderId      String
+  id                     Int    @id @default(autoincrement())
+  itemTemplate           String
+  artFrontUrl            String
+  artBackUrl             String
+  shippingAddressName    String
+  shippingAddressLine1   String
+  shippingAddressLine2   String
+  shippingAddressTown    String
+  shippingAddressState   String
+  shippingAddressCountry String
+  shippingAddressZipCode String
+  sourceItemId           String
+  order                  Order  @relation(fields: [orderId], references: [id])
+  orderId                Int
 }

@@ -9,44 +9,32 @@ const app = express()
 app.use(express.json())
 
 app.post('/orders', async (req, res) => {
-  const { sourceOrderId, items } = req.body
+  const { sourceOrderId, accountRef, items } = req.body;
 
-  // Generate a UUID for the order
-  const orderId = uuidv4()
-
-  // Create the order
   const order = await prisma.order.create({
     data: {
-      id: orderId,
       sourceOrderId,
-    },
-  })
-
-  // Create the items
-  const itemPromises = items.map(async (item) => {
-    // Generate a UUID for the item
-    const itemId = uuidv4()
-
-    // Create the item and associate it with the order
-    return prisma.item.create({
-      data: {
-        id: itemId,
-        url: item.url,
-        sourceItemId: item.sourceItemId,
-        order: {
-          connect: {
-            id: orderId,
-          },
-        },
+      accountRef,
+      items: {
+        create: items.map((item) => ({
+          itemTemplate: item.itemTemplate,
+          artFrontUrl: item.artFrontUrl,
+          artBackUrl: item.artBackUrl,
+          shippingAddressName: item.shippingAddressName,
+          shippingAddressLine1: item.shippingAddressLine1,
+          shippingAddressLine2: item.shippingAddressLine2,
+          shippingAddressTown: item.shippingAddressTown,
+          shippingAddressState: item.shippingAddressState,
+          shippingAddressCountry: item.shippingAddressCountry,
+          shippingAddressZipCode: item.shippingAddressZipCode,
+          sourceItemId: item.sourceItemId,
+        })),
       },
-    })
-  })
+    },
+  });
 
-  // Wait for all the items to be created
-  await Promise.all(itemPromises)
-
-  res.json({ order })
-})
+  res.json(order);
+});
 
 app.get('/items', async (req, res) => {
     try {

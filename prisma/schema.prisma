@@ -9,15 +9,16 @@ generator client {
 }
 
 model Order {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(uuid())
   sourceOrderId String
   accountRef    String
-  createdAt     DateTime @default(now()) // Added createdAt field
+  createdAt     DateTime @default(now())
   items         Item[]
+  orderStatus   String   @default("processing")
 }
 
 model Item {
-  id                     Int    @id @default(autoincrement())
+  id                     String @id @default(uuid())
   itemTemplate           String
   artFrontUrl            String
   artBackUrl             String
@@ -30,5 +31,8 @@ model Item {
   shippingAddressZipCode String
   sourceItemId           String
   order                  Order  @relation(fields: [orderId], references: [id])
-  orderId                Int
+  orderId                String
+  itemStatus             String @default("processing")
+  batchId                String @default("-1")
+  batchOrder             Int    @default(0)
 }

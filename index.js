@@ -3,11 +3,21 @@ const { PrismaClient } = require('@prisma/client')
 const {convertJsonToExcel} = require('./utils/jsonToExcel');
 const {sendWebhook} = require('./utils/webhook')
 // const { v4: uuidv4 } = require('uuid')
+const {pdfMerge} = require('./utils/pdfMerge')
 
 const prisma = new PrismaClient()
 
 const app = express()
 
+function isAuth(req, res, next) {
+  const auth = req.headers.authorization;
+  if (auth === process.env.API_KEY) {
+    next();
+  } else {
+    res.status(401);
+    res.send('Access forbidden');
+  }
+}
 // Add CORS headers to allow requests from a specific domain
 // TODO: Remove these before making live
 app.use(function(req, res, next) {
@@ -226,6 +236,17 @@ app.post('/tracking/update', async (req, res) => {
 app.get('/webhook-test-endpoint/', async (req, res) => {
 
 })
+
+app.post('/merge-pdfs', async (req, res) => {
+  try {
+    res.status(200).send("PDF Merge has begun.")
+    const {body} = req;
+    pdfMerge(body)
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal server error');
+  }
+});
 
 app.listen(3000, () => {
   console.log(`  -------------------------------------------------------

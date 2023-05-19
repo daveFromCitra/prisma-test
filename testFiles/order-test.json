@@ -1,0 +1,126 @@
+{
+    "sourceOrderId": "00000001",
+    "accountRef": "dave-account",
+    "items": [
+        {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-1"
+        },
+        {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-2"
+        },
+        {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-3"
+        },
+        {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-4"
+        },
+            {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-5"
+        },
+            {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-6"
+        },
+        {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-7"
+        },
+            {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-8"
+        },
+            {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-9"
+        },
+        {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shippingAddressName": "Name1",
+            "shippingAddressLine1": "Address1",
+            "shippingAddressLine2": "Address2",
+            "shippingAddressTown": "Town",
+            "shippingAddressState": "State",
+            "shippingAddressCountry": "Country",
+            "shippingAddressZipCode": "ZipCode",
+            "sourceItemId": "item-10"
+        }
+    ]
+}

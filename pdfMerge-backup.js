@@ -13,71 +13,69 @@ const path = require('path');
     // Create new PDF document
     const mergedPdf = await PDFDocument.create();
     
-    // Adding font files to the PDFs
     const openSansFile = fs.readFileSync(path.resolve(__dirname, '../resources/fonts/OpenSans-Regular.ttf'));
     const barcodeFile = fs.readFileSync(path.resolve(__dirname, '../resources/fonts/USPSIMBStandard.ttf'));
     
     // Loop through each object in the request body array
     for (const obj of body) {
       // Fetch PDF data from artwork1 URL
-      const artworkData = await fetch(obj.artUrl).then(res => res.arrayBuffer()).catch(error => console.error(error))
+      const artwork1Data = await fetch(obj.artFrontUrl).then(res => res.arrayBuffer()).catch(error => console.error(error))
+      
+      // Fetch PDF data from artwork2 URL
+      const artwork2Data = await fetch(obj.artBackUrl).then(res => res.arrayBuffer()).catch(error => console.error(error))
       
       // Load artwork1 and artwork2 PDFs
-      const artworkPdf = await PDFDocument.load(artworkData);
+      const artwork1Pdf = await PDFDocument.load(artwork1Data);
+      const artwork2Pdf = await PDFDocument.load(artwork2Data);
       
       // Get first page of artwork1 PDF
-      const artwork1Page = artworkPdf.getPages()[0];
-      const artwork2Page = artworkPdf.getPages()[1];
+      const artwork1Page = artwork1Pdf.getPages()[0];
+      artwork1Pdf.registerFontkit(fontKit)
 
-      artworkPdf.registerFontkit(fontKit)
-      const openSansFont = await artworkPdf.embedFont(openSansFile)
-      const barcodeFont = await artworkPdf.embedFont(barcodeFile)
+
+      const openSansFont = await artwork1Pdf.embedFont(openSansFile)
+      const barcodeFont = await artwork1Pdf.embedFont(barcodeFile)
 
       // Add name and reference number as text to artwork1 PDF
-      artwork2Page.drawText(`${obj.sourceItemId} - ${obj.shippingAddressName}`, {
-        x: 390,
-        y: 135,
-        size: 14,
+      artwork1Page.drawText(`${obj.sourceItemId} - ${obj.shippingAddressName}`, {
+        x: 50,
+        y: 80,
+        size: 12,
         font: openSansFont,
         color: cmyk(0, 0, 0, 1),
       });
 
-      artwork2Page.drawText(obj.shippingAddressLine1, {
-        x: 390,
-        y: 115,
-        size: 14,
+      artwork1Page.drawText(obj.shippingAddressLine1, {
+        x: 50,
+        y: 50,
+        size: 12,
         font: openSansFont,
         color: cmyk(0, 0, 0, 1),
       });
 
-      artwork2Page.drawText(`${obj.shippingAddressTown}, ${obj.shippingAddressState}, ${obj.shippingAddressZipCode}`, {
-        x: 390,
-        y: 95,
-        size: 14,
+      artwork1Page.drawText(`${obj.shippingAddressTown}, ${obj.shippingAddressState}, ${obj.shippingAddressZipCode}`, {
+        x: 50,
+        y: 30,
+        size: 12,
         font: openSansFont,
         color: cmyk(0, 0, 0, 1),
       });
 
-      artwork2Page.drawText(`United States of America`, {
-        x: 390,
-        y: 75,
-        size: 14,
-        font: openSansFont,
-        color: cmyk(0, 0, 0, 1),
-      });
-
-      artwork2Page.drawText(`${obj.imbCode}`, {
-        x: 390,
-        y: 25,
-        size: 14,
+      artwork1Page.drawText("DTTAFADDTTFTDTFTFDTDDADADAFADFATDDFTAAAFDTTADFAAATDFDTDFADDDTDFFT", {
+        x: 20,
+        y: 20,
+        size: 12,
         font: barcodeFont,
         color: cmyk(0, 0, 0, 1),
       });
 
-      // Copy pages from artwork1 and artwork2 to merged PDF document
-      const artworkPages = await mergedPdf.copyPages(artworkPdf, artworkPdf.getPageIndices());
-      artworkPages.forEach(page => mergedPdf.addPage(page));
 
+      // Copy pages from artwork1 and artwork2 to merged PDF document
+      const artwork1Pages = await mergedPdf.copyPages(artwork1Pdf, artwork1Pdf.getPageIndices());
+      artwork1Pages.forEach(page => mergedPdf.addPage(page));
+
+      const artwork2Pages = await mergedPdf.copyPages(artwork2Pdf, artwork2Pdf.getPageIndices());
+      artwork2Pages.forEach(page => mergedPdf.addPage(page));
       console.log(`${obj.sourceItemId} - merged`);
     }
 

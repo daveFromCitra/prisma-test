@@ -5,7 +5,7 @@ async function sendWebhook(webhookBody) {
     const webhookUrl = process.env.WEBHOOK_URL;
     // Send the POST request with the webhook body
     try {
-      const response = await axios.post(webhookUrl, webhookBody);
+      const response = await axios.post(webhookUrl, webhookBody, {headers: {"authorization":"password"}});
       console.log('Webhook sent successfully:', response.data);
     } catch (error) {
     //   console.error('Failed to send webhook:', error);
@@ -16,4 +16,3 @@ async function sendWebhook(webhookBody) {
 module.exports = {
     sendWebhook
 }
-

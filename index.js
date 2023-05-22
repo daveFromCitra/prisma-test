@@ -27,7 +27,6 @@ function isAuth(req, res, next) {
   }
 }
 
-
 function isAdmin(req, res, next) {
   const auth = req.headers.admin;
   if (auth === process.env.ADMIN_KEY) {
@@ -196,7 +195,13 @@ try {
     },
   });
   logger(order, "/order/")
-  res.json(order);
+  const displayOrder = {
+    data: {
+      sourceOrderId: order.sourceOrderId,
+      status: "processing"
+    }
+  }
+  res.json(displayOrder);
 } catch (error) {
   res.status(500).json(error)
   console.error(error);

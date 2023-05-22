@@ -541,6 +541,15 @@ app.get('/unique-batch-ids', async (req, res) => {
   }
 });
 
+app.post('/manual/update', async (req, res) => {
+  try {
+    sendWebhook(req.body)
+    res.status(200).json({message: "Sent"})
+  } catch (error) {
+    res.status(500).send('Internal server error')
+  }
+})
+
 
 app.listen(3000, () => {
   console.log(`  -------------------------------------------------------

@@ -186,7 +186,7 @@ app.get('/excel-dropzone', (req, res) => {
   res.send(page);
 })
 
-app.post('/order', isAuth, async (req, res) => {
+app.post('/order', isBasicAuth, async (req, res) => {
   const { sourceOrderId, accountRef, items } = req.body;
 try {
   const order = await prisma.order.create({
@@ -224,7 +224,7 @@ try {
 
 });
 
-app.get('/orders', isAuth, async (req, res) => {
+app.get('/orders', isBasicAuth, async (req, res) => {
   try {
     const orders = await prisma.order.findMany();
     res.status(200).json(orders);
@@ -260,7 +260,7 @@ app.get('/order/:sourceOrderId', isBasicAuth, async (req, res) => {
 })
 
 // CLIENT Route
-app.get('/items', isAuth, async (req, res) => {
+app.get('/items', isBasicAuth, async (req, res) => {
     try {
       const items = await prisma.item.findMany();
       res.json(items);
@@ -271,7 +271,7 @@ app.get('/items', isAuth, async (req, res) => {
 });
 
 // CLIENT Route
-app.get('/item/:sourceItemId', isAuth, async (req, res) => {
+app.get('/item/:sourceItemId', isBasicAuth, async (req, res) => {
   const { sourceItemId } = req.params
   
   try {

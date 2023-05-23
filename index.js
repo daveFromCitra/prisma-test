@@ -1,4 +1,5 @@
 const express = require('express')
+const basicAuth = require('basic-auth');
 const { PrismaClient } = require('@prisma/client')
 const {convertJsonToExcelSort} = require('./utils/jsonToExcelSort');
 const {sendWebhook} = require('./utils/webhook')
@@ -27,6 +28,18 @@ function isAuth(req, res, next) {
   }
 }
 
+function isBasicAuth(req, res, next) {
+  const credentials = basicAuth(req)
+
+  if (!credentials || credentials.name !== process.env.BASIC_NAME || credentials.pass !== process.env.BASIC_PASSWORD) {
+    res.set('WWW-Authenticate', 'Basic realm="Authentication Required"');
+    res.sendStatus(401);
+    return;
+  }
+
+  next();
+}
+
 function isAdmin(req, res, next) {
   const auth = req.headers.admin;
   if (auth === process.env.ADMIN_KEY) {
@@ -45,6 +58,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+
 
 app.use(express.json({limit: '50mb'}))
 
@@ -220,7 +235,7 @@ app.get('/orders', isAuth, async (req, res) => {
 })
 
 // CLIENT Route
-app.get('/order/:sourceOrderId', isAuth, async (req, res) => {
+app.get('/order/:sourceOrderId', isBasicAuth, async (req, res) => {
   const { sourceOrderId } = req.params
   try {
     const orderWithItems = await prisma.order.findUnique({
@@ -505,6 +520,7 @@ app.post('/tracking/update', async (req, res) => {
   try {
     const itemsToUpdate = req.body;
     logger(itemsToUpdate)
+    sendWebhook(itemsToUpdate)
     res.status(200).send('received');
   } catch (error) {
     console.error('Error updating items:', error);

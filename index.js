@@ -203,7 +203,7 @@ try {
           shipToAddressTown: item.shipToTown,
           shipToAddressState: item.shipToState,
           shipToAddressCountry: item.shipToCountry,
-          shipToAddressZipCode: item.shipToZipCode,
+          shipToAddressZipCode: item.shipToPostcode,
           sourceItemId: item.sourceItemId,
         })),
       },

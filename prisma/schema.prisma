@@ -20,7 +20,7 @@ model Order {
 model Item {
   id                   String  @id @default(uuid())
   itemTemplate         String
-  artUrl               String  @length(1000)
+  artUrl               String  @db.VarChar(1000)
   shipToName           String
   shipToAddressLine1   String
   shipToAddressLine2   String?

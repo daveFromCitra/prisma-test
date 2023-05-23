@@ -22,8 +22,9 @@ model Item {
   itemTemplate         String
   artUrl               String
   shipToName           String
-  shipToAddress1   String
-  shipToAddress2   String
+  shipToAddressLine1   String
+  shipToAddressLine2   String?
+  shipToAddressLine3   String?
   shipToAddressTown    String
   shipToAddressState   String
   shipToAddressCountry String

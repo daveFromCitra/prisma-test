@@ -3,7 +3,6 @@ const basicAuth = require('basic-auth');
 const { PrismaClient } = require('@prisma/client')
 const {convertJsonToExcelSort} = require('./utils/jsonToExcelSort');
 const {sendWebhook} = require('./utils/webhook')
-// const { v4: uuidv4 } = require('uuid')
 const {pdfMerge} = require('./utils/pdfMerge')
 const {logger} = require('./utils/logger')
 const morgan = require('morgan');
@@ -15,9 +14,11 @@ const prisma = new PrismaClient({
 })
 
 const app = express()
+// Access Logger
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url" :status :res[content-length] - :response-time ms - :req[body]', { stream: accessLogStream }));
 
+// Old Auth - DELETE
 function isAuth(req, res, next) {
   const auth = req.headers.authorization;
   if (auth === process.env.API_KEY) {
@@ -36,10 +37,23 @@ function isBasicAuth(req, res, next) {
     res.sendStatus(401);
     return;
   }
+  req.clientAccount = process.env.BASIC_NAME
+  next();
+}
+
+function isBasicAdmin(req, res, next) {
+  const credentials = basicAuth(req)
+
+  if (!credentials || credentials.name !== process.env.ADMIN_NAME || credentials.pass !== process.env.ADMIN_PASSWORD) {
+    res.set('WWW-Authenticate', 'Basic realm="Authentication Required"');
+    res.sendStatus(401);
+    return;
+  }
 
   next();
 }
 
+// Old Admin Auth - DELETE
 function isAdmin(req, res, next) {
   const auth = req.headers.admin;
   if (auth === process.env.ADMIN_KEY) {
@@ -63,136 +77,31 @@ app.use(function(req, res, next) {
 
 app.use(express.json({limit: '50mb'}))
 
-app.get('/excel-dropzone', (req, res) => {
-  const page = `
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
-      <script defer>
-          // Assuming you have an HTML input field with the id "csvFileInput"
-  const csvFileInput = document.getElementById('csvFileInput');
-  // const submitBtn = document.getElementById('submitBtn');
-  
-  // Event listener for when the submit button is clicked
-  // submitBtn.addEventListener('click', handleFileUpload);
-  
-  function handleFileUpload() {
-    const file = document.getElementById('csvFileInput').files[0];
-    const reader = new FileReader();
-  
-    reader.onload = function (e) {
-      const csvData = e.target.result;
-      const jsonBody = convertCsvToJson(csvData);
-      sendPutRequest(jsonBody);
-    };
-  
-    reader.readAsText(file);
-  }
-  
-  function convertCsvToJson(csvData) {
-    const lines = csvData.split('\\n');
-    const headers = parseCsvLine(lines[0]);
-  
-    const jsonData = [];
-  
-    for (let i = 1; i < lines.length; i++) {
-      const currentLine = parseCsvLine(lines[i]);
-      if (currentLine.length !== headers.length) {
-        // Skip the line if the number of columns doesn't match the header
-        continue;
-      }
-  
-      const jsonLine = {};
-  
-      for (let j = 0; j < headers.length; j++) {
-        const header = headers[j].trim();
-        const value = currentLine[j];
-        jsonLine[header] = value;
-      }
-  
-      const modifiedJsonLine = {
-        id: jsonLine['Id'],
-        sequence: parseInt(jsonLine['Sequence Number'], 10),
-        imbCode: jsonLine['Intelligent Mail barcode']
-      };
-  
-      jsonData.push(modifiedJsonLine);
+app.get('/page/:pageName', (req, res) => {
+  const pageName = req.params.pageName;
+  const filePath = path.join(__dirname, 'pages', `${pageName}.html`);
+
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error(`Error sending file: ${err}`);
+      res.status(err.status || 500).send('Internal server error');
     }
-  
-    return JSON.stringify(jsonData);
-  }
-  
-  function parseCsvLine(line) {
-    const values = [];
-    let currentVal = '';
-    let withinQuotes = false;
-  
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-  
-      if (char === '"') {
-        withinQuotes = !withinQuotes;
-      } else if (char === ',' && !withinQuotes) {
-        values.push(currentVal.trim());
-        currentVal = '';
-      } else {
-        currentVal += char;
-      }
-    }
-  
-    values.push(currentVal.trim());
-  
-    return values;
-  }
-  
-  function sendPutRequest(jsonBody) {
-      console.log(jsonBody);
-    // Perform your HTTP PUT request here using the jsonBody
-    // Replace the placeholder URL with your actual API endpoint
-    const url = 'http://127.0.0.1:3000/items/update';
-  
-    fetch(url, {
-      method: 'PUT',
-      body: jsonBody,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('HTTP error ' + response.status);
-        }
-        // Handle successful response
-        console.log('PUT request successful');
-      })
-      .catch(error => {
-        // Handle error
-        console.error('Error:', error);
-      });
-  }
-  
-      </script>
-  </head>
-  <body>
-      <input type="file" id="csvFileInput">
-      <button id="submitBtn" onclick="handleFileUpload()">Submit</button>
-  </body>
-  </html>
-  `
-  res.send(page);
+  });
+});
+
+app.get('/variable-pull', isBasicAuth, (req, res) => {
+  const variable = req.customVariable
+  res.send(variable)
 })
 
 app.post('/order', isBasicAuth, async (req, res) => {
+  const clientAccount = req.clientAccount
   const { sourceOrderId, accountRef, items } = req.body;
 try {
   const order = await prisma.order.create({
     data: {
       sourceOrderId,
-      accountRef,
+      clientAccount,
       items: {
         create: items.map((item) => ({
           itemTemplate: item.itemTemplate,

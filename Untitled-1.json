@@ -1,0 +1,38 @@
+{
+    "sourceOrderId": "0005",
+    "accountRef": "dave-account",
+    "items": [
+        {
+            "itemTemplate": "9x6",
+            "artUrl": "https://techstyles.citracommunications.com/-1959680159/Handler/CSSOverride/GetImage/7/PC-test-2sided-mini.pdf", 
+            "shipToName": "Name1",
+            "shipToAddressLine1": "Address1",
+            "shipToAddressLine2": "Address2",
+            "shipToAddressTown": "Town",
+            "shipToAddressState": "State",
+            "shipToAddressCountry": "Country",
+            "shipToAddressZipCode": "ZipCode",
+            "sourceItemId": "item-14"
+        }
+    ]
+},
+
+{
+
+  "sourceOrderId": "testPR_20230522-1",
+    "items": [
+        {
+            "itemTemplate": "9_x_6_standard",
+            "shipToName": "John Smith",
+            "shipToAddress1": "123 Fake Street",
+            "shipToAddress2": "Suite 456",
+            "shipToAddress3": "Room 2",
+            "shipToTown": "Sacramento",
+            "shipToPostcode": "95831",
+            "shipToState": "CA",
+            "shipToCountry": "USA",
+            "artUrl": "https://s3.amazonaws.com/files.foreclosureradar.com/subscriber/file/10515332-4030731-eoCV5jtWlcywIN29gK6bQw?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIG7CRH37YWJ34SEA%2F20230522%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230522T090000Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604800&X-Amz-Signature=d099403bb93a326dbe37d5d73ac63eb889345e76477aa89596c921bab92c262e"
+            "sourceItemId": "testPR_20230522-1-PIECE-1",
+        }
+    ]
+}

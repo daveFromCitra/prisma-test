@@ -12,6 +12,7 @@ function convertJsonToExcelSort(jsonData, batchId) {
     'Full Name': 'Full Name',
     'Street Name 1': 'Street Name 1',
     'Street Name 2': 'Street Name 2',
+    'Street Name 3': 'Street Name 3',
     'City': 'City',
     'Province': 'Province',
     'ZIP': 'ZIP',
@@ -22,12 +23,13 @@ function convertJsonToExcelSort(jsonData, batchId) {
   const data = [];
   jsonData.forEach(item => {
     const row = {
-      'Full Name': item.shippingAddressName,
-      'Street Name 1': item.shippingAddressLine1,
-      'Street Name 2': item.shippingAddressLine2,
-      'City': item.shippingAddressTown,
-      'Province': item.shippingAddressState,
-      'ZIP': item.shippingAddressZipCode,
+      'Full Name': item.shipToName,
+      'Street Name 1': item.shipToAddressLine1,
+      'Street Name 2': item.shipToAddressLine2,
+      'Street Name 3': item.shipToAddressLine3,
+      'City': item.shipToAddressTown,
+      'Province': item.shipToAddressState,
+      'ZIP': item.shipToAddressZipCode,
       'Id': item.id
 
     };

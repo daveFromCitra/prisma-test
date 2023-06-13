@@ -34,7 +34,7 @@ const path = require('path');
       const barcodeFont = await artworkPdf.embedFont(barcodeFile)
 
       // Add name and reference number as text to artwork1 PDF
-      artwork2Page.drawText(`${obj.sourceItemId} - ${obj.shippingAddressName}`, {
+      artwork2Page.drawText(`${obj.sourceItemId} - ${obj.shipToName}`, {
         x: 390,
         y: 135,
         size: 14,
@@ -42,7 +42,7 @@ const path = require('path');
         color: cmyk(0, 0, 0, 1),
       });
 
-      artwork2Page.drawText(obj.shippingAddressLine1, {
+      artwork2Page.drawText(obj.shipToAddressLine1, {
         x: 390,
         y: 115,
         size: 14,
@@ -50,7 +50,7 @@ const path = require('path');
         color: cmyk(0, 0, 0, 1),
       });
 
-      artwork2Page.drawText(`${obj.shippingAddressTown}, ${obj.shippingAddressState}, ${obj.shippingAddressZipCode}`, {
+      artwork2Page.drawText(`${obj.shipToAddressTown}, ${obj.shipToAddressState}, ${obj.shipToAddressZipCode}`, {
         x: 390,
         y: 95,
         size: 14,

@@ -231,7 +231,7 @@ app.get('/item/:sourceItemId', isBasicAuth, async (req, res) => {
 })
 
 // Update any and all items
-app.put('/items/update', async (req, res) => {
+app.put('/items/update', isBasicAdmin, async (req, res) => {
   try {
     const objects = req.body;
     for (const object of objects)  {
@@ -248,7 +248,7 @@ app.put('/items/update', async (req, res) => {
   }
 })
 
-app.get('/order-items/:sourceOrderId', async (req, res) => {
+app.get('/order-items/:sourceOrderId', isBasicAdmin, async (req, res) => {
   const { sourceOrderId } = req.params
   try {
     const items = await prisma.order.findFirst({
@@ -264,7 +264,7 @@ app.get('/order-items/:sourceOrderId', async (req, res) => {
 });
 
 // Get a list of all unbatched items
-app.get('/unbatched-items', async (req, res) => {
+app.get('/unbatched-items', isBasicAdmin, async (req, res) => {
   try {
     const unbatchedItems = await prisma.item.findMany({
       where: {batchId: "-1"}
@@ -277,7 +277,7 @@ app.get('/unbatched-items', async (req, res) => {
 });
 
 // Get all items in a batch
-app.get('/batch/:batchId', async (req, res) => {
+app.get('/batch/:batchId', isBasicAdmin, async (req, res) => {
   const { batchId } = req.params
   try {
     const batchItems = await prisma.item.findMany({
@@ -291,7 +291,7 @@ app.get('/batch/:batchId', async (req, res) => {
 })
 
 // Assign all un-assigned items to a new batch
-app.put('/batch/assign/:itemTemplate/:batchId', async (req, res) => {
+app.put('/batch/assign/:itemTemplate/:batchId', isBasicAdmin, async (req, res) => {
   // TODO: Add webhook to PR
   const { itemTemplate, batchId } = req.params
   try {
@@ -315,7 +315,7 @@ app.put('/batch/assign/:itemTemplate/:batchId', async (req, res) => {
 })
 
 // Update item status to all items in a batch
-app.put('/batch/update/:itemStatus/:batchId', async (req, res) => {
+app.put('/batch/update/:itemStatus/:batchId', isBasicAdmin, async (req, res) => {
   // TODO: Add webhook to PR
   const {itemStatus, batchId} = req.params
   try {
@@ -336,7 +336,7 @@ app.put('/batch/update/:itemStatus/:batchId', async (req, res) => {
 })
 
 // Make the excel file to be loaded
-app.get('/batch/export/:batchId', async (req, res) => {
+app.get('/batch/export/:batchId', isBasicAdmin, async (req, res) => {
   const { batchId } = req.params
   try {
     const batchItems = await prisma.item.findMany({
@@ -358,7 +358,7 @@ app.get('/batch/export/:batchId', async (req, res) => {
   }
 })
 
-app.get('/batch/download/:batchId', async (req, res) => {
+app.get('/batch/download/:batchId', isBasicAdmin, async (req, res) => {
   const { batchId } = req.params
   try {
     const batchItems = await prisma.item.findMany({
@@ -379,7 +379,7 @@ app.get('/batch/download/:batchId', async (req, res) => {
   }
 })
 
-app.post('/batch/upload', async (req, res) => {
+app.post('/batch/upload', isBasicAdmin, async (req, res) => {
   try {
     console.log(req.body)
     res.status(200).json(req.body)    
@@ -390,7 +390,7 @@ app.post('/batch/upload', async (req, res) => {
 
 })
 
-app.post('batch/pdf/:batchId', async (req, res) => {
+app.post('batch/pdf/:batchId', isBasicAdmin, async (req, res) => {
   try {
     res.status(200).send("PDF Merge has begun.")
     const {body} = req;
@@ -402,7 +402,7 @@ app.post('batch/pdf/:batchId', async (req, res) => {
 });
 
 // TODO: Tracking Update from SnailWorks - Whatever they send should be just fine.
-app.post('/tracking/update', async (req, res) => {
+app.post('/tracking/update', isBasicAdmin, async (req, res) => {
   // try {
   //   const itemsToUpdate = req.body; // Array of objects in the request body
   //   const updatedItems = [];
@@ -439,7 +439,7 @@ app.post('/tracking/update', async (req, res) => {
 
 })
 
-app.post('/merge-pdfs', async (req, res) => {
+app.post('/merge-pdfs', isBasicAdmin, async (req, res) => {
   try {
     res.status(200).send("PDF Merge has begun.")
     const {body} = req;
@@ -450,7 +450,7 @@ app.post('/merge-pdfs', async (req, res) => {
   }
 });
 
-app.get('/unique-batch-ids', async (req, res) => {
+app.get('/unique-batch-ids', isBasicAdmin, async (req, res) => {
   try {
     const uniqueBatchIds = await prisma.item.findMany({
       select: {
@@ -466,7 +466,7 @@ app.get('/unique-batch-ids', async (req, res) => {
   }
 });
 
-app.post('/manual/update', async (req, res) => {
+app.post('/manual/update', isBasicAdmin, async (req, res) => {
   try {
     sendWebhook(req.body)
     res.status(200).json({message: "Sent"})

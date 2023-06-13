@@ -402,7 +402,7 @@ app.post('batch/pdf/:batchId', isBasicAdmin, async (req, res) => {
 });
 
 // TODO: Tracking Update from SnailWorks - Whatever they send should be just fine.
-app.post('/tracking/update', isBasicAdmin, async (req, res) => {
+app.post('/tracking/update', async (req, res) => {
   // try {
   //   const itemsToUpdate = req.body; // Array of objects in the request body
   //   const updatedItems = [];
@@ -428,8 +428,8 @@ app.post('/tracking/update', isBasicAdmin, async (req, res) => {
   // }
   try {
     const itemsToUpdate = req.body;
-    logger(itemsToUpdate)
-    sendWebhook(itemsToUpdate)
+    logger(itemsToUpdate, "Mail Tracking")
+    // sendWebhook(itemsToUpdate)
     res.status(200).send('received');
   } catch (error) {
     console.error('Error updating items:', error);

@@ -1,5 +1,6 @@
 const express = require('express')
 const basicAuth = require('basic-auth');
+const {uploadFileSFTP} = require('./utils/uploadFileSFTP')
 const { PrismaClient } = require('@prisma/client')
 const {convertJsonToExcelSort} = require('./utils/jsonToExcelSort');
 const {sendWebhook} = require('./utils/webhook')
@@ -72,8 +73,6 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
-
 
 app.use(express.json({limit: '50mb'}))
 
@@ -351,7 +350,9 @@ app.get('/batch/export/:batchId', isBasicAdmin, async (req, res) => {
         itemStatus: "sorting"
       }
     })
+    uploadFileSFTP(`${batchId}.xlsx`, "./batchDataFiles/", "/")
     res.json(batchItems)
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: `Error retrieving batch ${batchId}`});
@@ -474,6 +475,7 @@ app.post('/manual/update', isBasicAdmin, async (req, res) => {
     res.status(500).send('Internal server error')
   }
 })
+
 
 
 app.listen(3000, () => {

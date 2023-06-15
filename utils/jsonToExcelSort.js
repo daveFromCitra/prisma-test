@@ -38,8 +38,7 @@ function convertJsonToExcelSort(jsonData, batchId) {
 
   // Convert JSON to Excel
   const xls = json2xls(data, {fields: columns});
-  fs.writeFileSync(`${batchId}.xlsx`, xls, 'binary');
-
+  fs.writeFileSync(`./batchDataFiles/${batchId}.xlsx`, xls, 'binary');
   console.log('Excel sheet created successfully!');
 }
 

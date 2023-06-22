@@ -19,17 +19,6 @@ const app = express()
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url" :status :res[content-length] - :response-time ms - :req[body]', { stream: accessLogStream }));
 
-// Old Auth - DELETE
-function isAuth(req, res, next) {
-  const auth = req.headers.authorization;
-  if (auth === process.env.API_KEY) {
-    next();
-  } else {
-    res.status(401);
-    res.send('Access forbidden');
-  }
-}
-
 function isBasicAuth(req, res, next) {
   const credentials = basicAuth(req)
 
@@ -52,17 +41,6 @@ function isBasicAdmin(req, res, next) {
   }
 
   next();
-}
-
-// Old Admin Auth - DELETE
-function isAdmin(req, res, next) {
-  const auth = req.headers.admin;
-  if (auth === process.env.ADMIN_KEY) {
-    next();
-  } else {
-    res.status(401);
-    res.send('Access forbidden');
-  }
 }
 
 // Add CORS headers to allow requests from a specific domain
@@ -274,6 +252,24 @@ app.get('/unbatched-items', isBasicAdmin, async (req, res) => {
     res.status(500).json({ message: 'Error retrieving unbatched items' });
   }
 });
+
+app.get('/batches', isBasicAdmin, async (req, res) => {
+  const uniqueBatchIds = await prisma.item.groupBy({
+    by: ['batchId'],
+    _count: {
+      batchId: true
+    }
+  });
+
+  try {
+    const batchIds = uniqueBatchIds.map(item => item.batchId)
+    res.json(batchIds)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({message: "Error retriving batches"})
+  }
+  
+})
 
 // Get all items in a batch
 app.get('/batch/:batchId', isBasicAdmin, async (req, res) => {

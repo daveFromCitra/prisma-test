@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "node webhookendpoint.js"
+    "dev": "node webhookendpoint.js",
+    "db": "npx prisma validate && npx prisma format && npx prisma generate && npx prisma db push",
+    "studio": "npx prisma studio"
   },
   "author": "",
   "license": "ISC",
